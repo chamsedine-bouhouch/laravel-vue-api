@@ -2,26 +2,51 @@
     <div class="todoListContainer">
         <div class="heading">
             <h2 id="title">Todo List</h2>
-            <add-item-form></add-item-form>
+            <add-item-form />
         </div>
-        <list-view/>
+        <list-view :items="items" v-on:relodlist="getList()" />
     </div>
 </template>
 <script>
-import addItemForm from "./addItemForm"
-import listView from "./listView"
+import addItemForm from "./addItemForm";
+import listView from "./listView";
 export default {
-    name:"App",
-    comments:{
+    components: {
         addItemForm,
-        listView
-    }
-}
+        listView,
+    },
+    data: function () {
+        return {
+            items: [],
+        };
+    },
+    methods: {
+        getList() {
+            axios.get("api/items").then((response) => {
+                this.items = response.data;
+            });
+            // .catch((error) => {
+            //     console.log(error);
+            // });
+        },
+    },
+    created() {
+        this.getList();
+    },
+};
 </script>
-<style >
-   .todoListContainer{
-       width: 350px;
-       margin: auto;
-   } 
-   
+<style scoped>
+.todoListContainer {
+    width: 350px;
+    margin: auto;
+}
+
+.heading {
+    background: #e6e6e6;
+    padding: 10px;
+}
+
+#title {
+    text-align: center;
+}
 </style>
